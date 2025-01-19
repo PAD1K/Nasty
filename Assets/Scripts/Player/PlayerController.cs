@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D _playerRb;
+    [SerializeField] private IMovable _movementController;
     private InputSystem_Actions _playerInputActions;
 
     void Awake()
@@ -12,37 +12,31 @@ public class PlayerController : MonoBehaviour
 
         // Better enabling input actions in action map
         _playerInputActions.Player.Enable();
+
+        if(!TryGetComponent<IMovable>(out _movementController))
+        {
+            Debug.Log("There is no IMovable component attached to object");
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Debug.Log(_playerInputActions.Player.Move.ReadValue<Vector2>());
-        _playerRb.AddForce(_playerInputActions.Player.Move.ReadValue<Vector2>(), ForceMode2D.Force);
-
-        // if(Mathf.Abs(transform.position.x) >= 10)
-        // {
-        //     Debug.Log("X");
-        //     _playerRb.linearVelocity = new Vector2(_playerRb.linearVelocity.x * -1, _playerRb.linearVelocity.y);
-        // }
-        // else if (Mathf.Abs(transform.position.y) >= 10)
-        // {
-        //     Debug.Log("Y");
-        //     _playerRb.linearVelocity = new Vector2(_playerRb.linearVelocity.x, _playerRb.linearVelocity.y * -1);
-        // }
+        _movementController?.Move(_playerInputActions.Player.Move.ReadValue<Vector2>());
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public void ChangeMovementController(IMovable movementController)
     {
-        if(other.tag == "WallX")
+        if(movementController == null)
         {
-            Debug.Log("X");
-            _playerRb.linearVelocity = new Vector2(_playerRb.linearVelocity.x * -1, _playerRb.linearVelocity.y);
+            Debug.Log("MovementController is null");
+            return;
         }
-        else if(other.tag == "WallY")
-        {
-            Debug.Log("Y");
-            _playerRb.linearVelocity = new Vector2(_playerRb.linearVelocity.x, _playerRb.linearVelocity.y * -1);
-        }
+
+        _movementController = movementController;
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        ChangeMovementController(other.GetComponent<IMovable>());
     }
 }
