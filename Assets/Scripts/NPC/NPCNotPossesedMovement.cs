@@ -9,6 +9,7 @@ public class NPCNotPossesedMovement : MonoBehaviour
     [SerializeField] private PossessionSlider _possessionSlider;
     protected NavMeshAgent _npcNavMeshAgent;
     private bool _isPossessed = false;
+    private bool _isStarted = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -17,12 +18,15 @@ public class NPCNotPossesedMovement : MonoBehaviour
         _npcNavMeshAgent.updateRotation = false;
         _npcNavMeshAgent.updateUpAxis = false;
         _npcNavMeshAgent.SetDestination(generateDestination());
-        StartCoroutine("GeneratePoint");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (_isStarted) {
+            StartCoroutine("GeneratePoint");
+        }
+
         if (!_npcNavMeshAgent.pathPending && _npcNavMeshAgent.remainingDistance < 0.5f && !_isPossessed)
         {
             _npcNavMeshAgent.SetDestination(generateDestination());
@@ -32,6 +36,7 @@ public class NPCNotPossesedMovement : MonoBehaviour
     public void npcPossesed () {
         _isPossessed = true;
         _possessionSlider.Possessed();
+        _isStarted = false;
         StopCoroutine("GeneratePoint");
         _npcNavMeshAgent.ResetPath();
     }
@@ -46,10 +51,10 @@ public class NPCNotPossesedMovement : MonoBehaviour
 
     IEnumerator GeneratePoint()
     {
-        while (true) {
-            _npcNavMeshAgent.ResetPath();
-            _npcNavMeshAgent.SetDestination(generateDestination());
-            yield return new WaitForSeconds(_generateNewPointTime);
-        }
+        _isStarted = false;  
+        _npcNavMeshAgent.ResetPath();
+        _npcNavMeshAgent.SetDestination(generateDestination());
+        yield return new WaitForSeconds(_generateNewPointTime);
+        _isStarted = true;
     }
 }

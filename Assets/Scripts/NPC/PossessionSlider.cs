@@ -5,9 +5,6 @@ public class PossessionSlider : MonoBehaviour
 {
     [SerializeField] Image _possessionSlider;
     private bool _isPossessed = false;
-    void Awake() {
-        // _possessionSlider = GetComponent<Image>();
-    }
 
     public void DisplaySlider() {
         if (!_isPossessed) {
@@ -25,7 +22,6 @@ public class PossessionSlider : MonoBehaviour
     public void UpdateSlider(float time) {
         if (!_isPossessed) {
             _possessionSlider.fillAmount = time;
-            Debug.Log(_possessionSlider.fillAmount);
         }
     }
 
