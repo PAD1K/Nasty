@@ -3,6 +3,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private IMovable _movementController;
+    [SerializeField] private PossessionSlider _possessionSlider;
+    [SerializeField] float _timeToPossess = 0.5f;
+    private float _timeLeftForPossession = 0.0f;
     private InputSystem_Actions _playerInputActions;
 
     void Awake()
@@ -32,11 +35,32 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        _movementController = movementController;
+        if (movementController is NPCMovement npcController) {
+            npcController.possessNPC();
+            _movementController = movementController;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        _possessionSlider.DisplaySlider();
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        ChangeMovementController(other.GetComponent<IMovable>());
+        _timeLeftForPossession += Time.deltaTime;
+        _possessionSlider.UpdateSlider(_timeLeftForPossession/_timeToPossess);
+
+        if (_timeLeftForPossession >= _timeToPossess)
+        {
+            ChangeMovementController(other.GetComponent<IMovable>());
+            _timeLeftForPossession = 0f;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        _timeLeftForPossession = 0f;
+        _possessionSlider.HideSlider();
     }
 }
