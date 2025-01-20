@@ -1,44 +1,41 @@
 using System.Collections;
-using NavMeshPlus.Extensions;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class NPCNotPossesedMovement : MonoBehaviour
 {
     [SerializeField] private float _generateNewPointTime = 2f;
-    [SerializeField] private PossessionSlider _possessionSlider;
-    protected NavMeshAgent _npcNavMeshAgent;
-    private bool _isPossessed = false;
+    private NavMeshAgent _npcNavMeshAgent;
+    private NPCPossess _npcPossess;
     private bool _isStarted = true;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        _npcNavMeshAgent = GetComponent<NavMeshAgent>();
+        if(!TryGetComponent<NPCPossess>(out _npcPossess))
+        {
+            Debug.Log("There is no NPCNotPossesedMovement component attached to object");
+        }
+
+        if(!TryGetComponent<NavMeshAgent>(out _npcNavMeshAgent))
+        {
+            Debug.Log("There is no NavMeshAgent component attached to object");
+        }
+
         _npcNavMeshAgent.updateRotation = false;
         _npcNavMeshAgent.updateUpAxis = false;
         _npcNavMeshAgent.SetDestination(generateDestination());
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (_isStarted) {
             StartCoroutine("GeneratePoint");
         }
 
-        if (!_npcNavMeshAgent.pathPending && _npcNavMeshAgent.remainingDistance < 0.5f && !_isPossessed)
+        if (!_npcNavMeshAgent.pathPending && _npcNavMeshAgent.remainingDistance < 0.5f && !_npcPossess.isPossessed())
         {
             _npcNavMeshAgent.SetDestination(generateDestination());
         }
-    }
-
-    public void npcPossesed () {
-        _isPossessed = true;
-        _possessionSlider.Possessed();
-        _isStarted = false;
-        StopCoroutine("GeneratePoint");
-        _npcNavMeshAgent.ResetPath();
     }
 
     Vector3 generateDestination() 
@@ -51,8 +48,14 @@ public class NPCNotPossesedMovement : MonoBehaviour
 
     IEnumerator GeneratePoint()
     {
-        _isStarted = false;  
+        _isStarted = false; 
         _npcNavMeshAgent.ResetPath();
+
+        if (_npcPossess.isPossessed()) {
+            StopCoroutine("GeneratePoint");
+            yield return new WaitForSeconds(0);
+        }
+
         _npcNavMeshAgent.SetDestination(generateDestination());
         yield return new WaitForSeconds(_generateNewPointTime);
         _isStarted = true;
