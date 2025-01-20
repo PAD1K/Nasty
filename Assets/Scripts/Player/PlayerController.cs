@@ -3,8 +3,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private IMovable _movementController;
-    private NPCPossess _npcPossess = null;
     [SerializeField] float _timeToPossess = 0.5f;
+    [SerializeField] private PossessionSlider _possessionProgressSlider;
     private float _timeLeftForPossession = 0.0f;
     private InputSystem_Actions _playerInputActions;
 
@@ -34,36 +34,31 @@ public class PlayerController : MonoBehaviour
         }
 
         npcPossess.possessNPC();
+        _possessionProgressSlider.DisableSlider();
         _movementController = movementController;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        _npcPossess = other.GetComponent<NPCPossess>();
-        _npcPossess.displayPossessionSlider();
+        _possessionProgressSlider.DisplaySlider();
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (_npcPossess != null) {
-            _timeLeftForPossession += Time.deltaTime;
+        _timeLeftForPossession += Time.deltaTime;
 
-            _npcPossess.updatePossessionSlider(_timeLeftForPossession/_timeToPossess);
+        _possessionProgressSlider.UpdateSlider(_timeLeftForPossession/_timeToPossess);
 
-            if (_timeLeftForPossession >= _timeToPossess)
-            {
-                ChangeMovementController(other.GetComponent<IMovable>(), _npcPossess);
-                _timeLeftForPossession = 0f;
-            }
+        if (_timeLeftForPossession >= _timeToPossess)
+        {
+            ChangeMovementController(other.GetComponent<IMovable>(), other.GetComponent<NPCPossess>());
+            _timeLeftForPossession = 0f;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (_npcPossess != null) {
-            _npcPossess.hidePossessionSlider();
-            _timeLeftForPossession = 0f;
-            _npcPossess = null;
-        }
+        _possessionProgressSlider.HideSlider();
+        _timeLeftForPossession = 0f;
     }
 }

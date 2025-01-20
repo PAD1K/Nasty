@@ -25,7 +25,7 @@ public class PossessionSlider : MonoBehaviour
         }
     }
 
-    public void Possessed () {
+    public void DisableSlider () {
         _isInPossession = true;
         _possessionSlider.fillAmount = 0f;
         this.gameObject.SetActive(false);

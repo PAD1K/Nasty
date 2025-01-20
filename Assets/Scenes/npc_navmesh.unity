@@ -170,7 +170,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47b3c3f02957bd64c99c2fe361a44cf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _possessionSlider: {fileID: 1832802325}
 --- !u!114 &23719729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96603,7 +96602,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47b3c3f02957bd64c99c2fe361a44cf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _possessionSlider: {fileID: 1832802325}
 --- !u!114 &594056710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98594,6 +98592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timeToPossess: 2
+  _possessionProgressSlider: {fileID: 1832802325}
 --- !u!50 &1071581814
 Rigidbody2D:
   serializedVersion: 5
@@ -98894,7 +98893,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47b3c3f02957bd64c99c2fe361a44cf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _possessionSlider: {fileID: 1832802325}
 --- !u!114 &1793821192
 MonoBehaviour:
   m_ObjectHideFlags: 0
