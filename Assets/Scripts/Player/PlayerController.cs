@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PossessionSlider _possessionProgressSlider;
     private float _timeLeftForPossession = 0.0f;
     private InputSystem_Actions _playerInputActions;
+    private bool _isCaptured = false;
 
     void Awake()
     {
@@ -27,13 +28,13 @@ public class PlayerController : MonoBehaviour
 
     public void ChangeMovementController(IMovable movementController, NPCPossess npcPossess)
     {
-        if(movementController == null)
+        if(movementController == null || this._isCaptured)
         {
-            Debug.Log("MovementController is null");
             return;
         }
 
         npcPossess.possessNPC();
+        _isCaptured = true;
         _possessionProgressSlider.DisableSlider();
         _movementController = movementController;
     }
