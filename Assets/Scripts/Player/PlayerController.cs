@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
         npcPossess.possessNPC();
         _isCaptured = true;
         _possessionProgressSlider.DisableSlider();
+        // _movementController.Destroy();
         _movementController = movementController;
     }
 
