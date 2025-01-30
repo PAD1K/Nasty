@@ -9,7 +9,8 @@ public class NPCMovement : MonoBehaviour, IMovable
     {
         if (direction == Vector2.zero)
         {
-            _npcRb.linearVelocity = Vector2.zero;    
+            _npcRb.linearVelocity = Vector2.zero; 
+            return;   
         }
 
         _npcRb.linearVelocity = direction * _movementSpeedMultiplier;

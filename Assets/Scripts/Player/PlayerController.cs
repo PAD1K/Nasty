@@ -37,12 +37,18 @@ public class PlayerController : MonoBehaviour
         npcPossess.possessNPC();
         _isCaptured = true;
         _possessionProgressSlider.DisableSlider();
-        // _movementController.Destroy();
         _movementController = movementController;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if(other.transform.tag == "Prop")
+        {
+            // TODO: remove DestroyProp when posses logic will be implemented
+            // other.gameObject.GetComponent<PropDestructionLogic>().DestroyProp();
+            // other.gameObject.GetComponent<PropDestructionLogic>().ShakeObject();
+        }
+
         _possessionProgressSlider.DisplaySlider();
     }
 
@@ -56,6 +62,7 @@ public class PlayerController : MonoBehaviour
         {
             ChangeMovementController(other.GetComponent<IMovable>(), other.GetComponent<NPCPossess>());
             _timeLeftForPossession = 0f;
+            SetPlayerVisible(false);
         }
     }
 
@@ -65,13 +72,9 @@ public class PlayerController : MonoBehaviour
         _timeLeftForPossession = 0f;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void SetPlayerVisible(bool isVisible)
     {
-         if(other.transform.tag == "Prop")
-        {
-            // TODO: remove DestroyProp when posses logic will be implemented
-            // other.gameObject.GetComponent<PropDestructionLogic>().DestroyProp();
-            other.gameObject.GetComponent<PropDestructionLogic>().ShakeObject();
-        } 
+        GetComponent<Collider2D>().enabled = isVisible;
+        GetComponent<SpriteRenderer>().enabled = isVisible;
     }
 }
