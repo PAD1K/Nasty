@@ -30,4 +30,9 @@ public class PossessionSlider : MonoBehaviour
         _possessionSlider.fillAmount = 0f;
         this.gameObject.SetActive(false);
     }
+
+    public void EnableSlider () {
+        _isInPossession = false;
+        this.gameObject.SetActive(true);
+    }
 }
