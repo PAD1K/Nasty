@@ -61,4 +61,14 @@ public class PlayerController : MonoBehaviour
         _possessionProgressSlider.HideSlider();
         _timeLeftForPossession = 0f;
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+         if(other.transform.tag == "Prop")
+        {
+            // TODO: remove DestroyProp when posses logic will be implemented
+            // other.gameObject.GetComponent<PropDestructionLogic>().DestroyProp();
+            other.gameObject.GetComponent<PropDestructionLogic>().ShakeObject();
+        } 
+    }
 }

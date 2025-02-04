@@ -6,6 +6,7 @@ TagManager:
   tags:
   - WallX
   - WallY
+  - Prop
   layers:
   - Default
   - TransparentFX
