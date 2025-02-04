@@ -40,11 +40,13 @@ public class PlayerController : MonoBehaviour
         ChangeMovementController(other.GetComponent<IMovable>());
     }
 
-     private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.transform.tag == "Prop")
+         if(other.transform.tag == "Prop")
         {
-            other.gameObject.GetComponent<PropDestructionLogic>().DestroyProp();
+            // TODO: remove DestroyProp when posses logic will be implemented
+            // other.gameObject.GetComponent<PropDestructionLogic>().DestroyProp();
+            other.gameObject.GetComponent<PropDestructionLogic>().ShakeObject();
         } 
     }
 }
