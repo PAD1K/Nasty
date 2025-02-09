@@ -3,10 +3,16 @@ using UnityEngine;
 public class NPCMovement : MonoBehaviour, IMovable
 {
     [SerializeField] private Rigidbody2D _npcRb;
-    [SerializeField] private float _movementSpeedMultiplier = 1;
+    [SerializeField] private float _movementSpeedMultiplier = 5;
 
     public void Move(Vector2 direction)
     {
-        _npcRb.AddForce(direction * _movementSpeedMultiplier, ForceMode2D.Force);
+        if (direction == Vector2.zero)
+        {
+            _npcRb.linearVelocity = Vector2.zero; 
+            return;   
+        }
+
+        _npcRb.linearVelocity = direction * _movementSpeedMultiplier;
     }
 }
