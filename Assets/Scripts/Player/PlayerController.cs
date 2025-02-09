@@ -110,23 +110,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Smash(float damage)
-    {
-        if(!TryGetComponent<NPCHealth>(out _npcHealth))
-        {
-            return;
-        }
-
-        Vector2 currentPosition = transform.position;
-        _npcHealth.TakeDamage(damage);
-
-        if (_npcHealth.CurrentHealth < 0)
-        {
-            ReleaseNpc(currentPosition);
-        }
-    }
-
-    private void ReleaseNpc(Vector2 position)
+    public void ReleaseNpc(Vector2 position)
     {
         if (!_isCaptured)
         {

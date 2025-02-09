@@ -3,7 +3,7 @@ using UnityEngine;
 public class NPCHealth : MonoBehaviour, IDestroyable
 {
     [SerializeField] private float _maxHealth;
-    [SerializeField] private float _currentHealth;
+    private float _currentHealth;
     private Rigidbody2D _npcRb;
 
     public float CurrentHealth
