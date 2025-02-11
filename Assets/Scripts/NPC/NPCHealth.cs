@@ -6,15 +6,9 @@ public class NPCHealth : MonoBehaviour, IDestroyable
     private float _currentHealth;
     private Rigidbody2D _npcRb;
 
-    public float CurrentHealth
-    {
-        get { return _currentHealth; }
-    }
+    public float CurrentHealth => _currentHealth;
 
-    public float MaxHealth
-    {
-        get { return _maxHealth; }
-    }
+    public float MaxHealth => _maxHealth;
 
     void Awake() 
     {
@@ -34,11 +28,12 @@ public class NPCHealth : MonoBehaviour, IDestroyable
         }
         else
         {
-            Destroy();
+            _npcRb.gameObject.SetActive(false);
+            DestroyRigidbody();
         }
     }
 
-    public void Destroy()
+    public void DestroyRigidbody()
     {
         if (_npcRb != null)
         {

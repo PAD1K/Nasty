@@ -1,7 +1,4 @@
 using UnityEngine;
-using System;
-using Unity.VisualScripting;
-using System.Text.RegularExpressions;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,6 +9,9 @@ public class PlayerController : MonoBehaviour
     private InputSystem_Actions _playerInputActions;
     private bool _isCaptured = false;
     private NPCHealth _npcHealth = null;
+    private Collider2D _collider = null;
+    private SpriteRenderer _spriteRenderer = null;
+    private Rigidbody2D _rigidbody = null;
 
     void Awake()
     {
@@ -22,6 +22,21 @@ public class PlayerController : MonoBehaviour
         if(!TryGetComponent<IMovable>(out _movementController))
         {
             Debug.Log("There is no IMovable component attached to object");
+        }
+
+        if (!TryGetComponent<Collider2D>(out _collider))
+        {
+            Debug.Log("There is no Collider2D component attached to object");
+        }
+
+        if (!TryGetComponent<SpriteRenderer>(out _spriteRenderer))
+        {
+            Debug.Log("There is no SpriteRenderer component attached to object");
+        }
+
+        if (!TryGetComponent<Rigidbody2D>(out _rigidbody))
+        {
+            Debug.Log("There is no SpriteRenderer component attached to object");
         }
     }
 
@@ -93,15 +108,14 @@ public class PlayerController : MonoBehaviour
 
     private void SetPlayerVisible(bool isVisible, Vector2? position = null)
     {
-        GetComponent<Collider2D>().enabled = isVisible;
-        GetComponent<SpriteRenderer>().enabled = isVisible;
+        _collider.enabled = isVisible;
+        _spriteRenderer.enabled = isVisible;
 
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
+        if (_rigidbody != null)
         {
-            rb.linearVelocity = Vector2.zero;
-            rb.angularVelocity = 0f;
-            rb.simulated = isVisible;
+            _rigidbody.linearVelocity = Vector2.zero;
+            _rigidbody.angularVelocity = 0f;
+            _rigidbody.simulated = isVisible;
         }
 
         if (isVisible && position.HasValue)
